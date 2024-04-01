@@ -157,6 +157,9 @@ public class RegisterActivity extends AppCompatActivity {
                     if (o.getResultCode() == Activity.RESULT_OK) {
                         Intent data = o.getData();
                         Uri imageUri = data.getData();
+
+                        Log.d("RegisterActivity", imageUri.toString());
+
                         Log.d("123123", "onActivityResult: "+data);
 
                         file = createFileFormUri(imageUri, "avatar");

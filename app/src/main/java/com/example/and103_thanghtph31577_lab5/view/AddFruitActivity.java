@@ -146,12 +146,16 @@ binding.avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onActivityResult(ActivityResult o) {
                     if (o.getResultCode() == Activity.RESULT_OK) {
+
+                        Uri tempUri = null;
+
                         ds_image.clear();
                         Intent data = o.getData();
                         if (data.getClipData() != null) {
                             int count = data.getClipData().getItemCount();
                             for (int i = 0; i < count; i++) {
                                 Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                                 tempUri = imageUri;
 
                                 File file = createFileFormUri(imageUri, "image" + i);
                                 ds_image.add(file);
@@ -161,20 +165,26 @@ binding.avatar.setOnClickListener(new View.OnClickListener() {
                         } else if (data.getData() != null) {
                             // Trường hợp chỉ chọn một hình ảnh
                             Uri imageUri = data.getData();
+
+                            tempUri = imageUri;
                             // Thực hiện các xử lý với imageUri
                             File file = createFileFormUri(imageUri, "image" );
                             ds_image.add(file);
 
                         }
-                        Glide.with(AddFruitActivity.this)
-                                .load(ds_image.get(0))
-                                .thumbnail(Glide.with(AddFruitActivity.this).load(R.drawable.baseline_broken_image_24))
-                                .centerCrop()
-                                .circleCrop()
-                                .skipMemoryCache(true)
+
+                        if (tempUri != null) {
+                            Glide.with(AddFruitActivity.this)
+                                    .load(tempUri)
+                                    .thumbnail(Glide.with(AddFruitActivity.this).load(R.drawable.baseline_broken_image_24))
+                                    .centerCrop()
+                                    .circleCrop()
+                                    .skipMemoryCache(true)
 //                                .diskCacheStrategy(DiskCacheStrategy.NONE)
 //                                .skipMemoryCache(true)
-                                .into(binding.avatar);
+                                    .into(binding.avatar);
+                        }
+
                     }
                 }
             });
