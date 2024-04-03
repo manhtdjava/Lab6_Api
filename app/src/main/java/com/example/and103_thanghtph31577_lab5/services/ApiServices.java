@@ -24,7 +24,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiServices {
-    public static String BASE_URL = "http://10.82.0.119:3000/api/";
+    public static String BASE_URL = "http://192.168.1.5:3000/api/";
 
     @GET("get-list-distributor")
         Call<Response<ArrayList<Distributor>>> getListDistributor();
@@ -65,9 +65,17 @@ public interface ApiServices {
                                                 @Part ArrayList<MultipartBody.Part> ds_hinh
                                                 );
 
+    @Multipart
+    @PUT("update-fruit-file-image/{id}")
+    Call<Response<Fruit>> updateFruitWithFileImage(
+            @Path("fruitId") String id,
+            @PartMap Map<String, RequestBody> requestBodyMap,
+            @Part ArrayList<MultipartBody.Part> ds_hinh
+    );
 
 
-
+    @DELETE("destroy-fruit-by-id/{id}")
+    Call<Response<Fruit>> deleteFruit(@Path("id") String id);
 
 
 }

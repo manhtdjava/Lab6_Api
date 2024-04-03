@@ -1,6 +1,9 @@
 package com.example.and103_thanghtph31577_lab5.adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import com.example.and103_thanghtph31577_lab5.R;
 import com.example.and103_thanghtph31577_lab5.databinding.ItemFruitBinding;
 import com.example.and103_thanghtph31577_lab5.model.Distributor;
 import com.example.and103_thanghtph31577_lab5.model.Fruit;
+import com.example.and103_thanghtph31577_lab5.view.UpdateFruitActivity;
 
 import java.util.ArrayList;
 
@@ -33,6 +37,8 @@ public class FruitAdapter  extends RecyclerView.Adapter<FruitAdapter.ViewHolder>
         void edit(Fruit fruit);
     }
 
+
+
     @NonNull
     @Override
     public FruitAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,17 +49,31 @@ public class FruitAdapter  extends RecyclerView.Adapter<FruitAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull FruitAdapter.ViewHolder holder, int position) {
-        Fruit fruit = list.get(position);
-        holder.binding.tvName.setText(fruit.getName());
-        holder.binding.tvPriceQuantity.setText("price :" +fruit.getPrice()+" - quantity:" +fruit.getQuantity());
-        holder.binding.tvDes.setText(fruit.getDescription());
-        String url  = fruit.getImage().get(0);
-        String newUrl = url.replace("localhost", "10.0.2.2");
-        Glide.with(context)
-                .load(newUrl)
-                .thumbnail(Glide.with(context).load(R.drawable.baseline_broken_image_24))
-                .into(holder.binding.img);
-        Log.d("321321", "onBindViewHolder: "+list.get(position).getImage().get(0));
+            Fruit fruit = list.get(position);
+            holder.binding.tvName.setText(fruit.getName());
+            holder.binding.tvPriceQuantity.setText("price :" + fruit.getPrice() + " - quantity:" + fruit.getQuantity());
+            holder.binding.tvDes.setText(fruit.getDescription());
+            String url = fruit.getImage().get(0);
+            String newUrl = url.replace("localhost", "10.0.2.2");
+            Glide.with(context)
+                    .load(newUrl)
+                    .thumbnail(Glide.with(context).load(R.drawable.baseline_broken_image_24))
+                    .into(holder.binding.img);
+            Log.d("321321", "onBindViewHolder: " + list.get(position).getImage().get(0));
+
+            holder.binding.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fruitClick.delete(fruit);
+                }
+            });
+            holder.binding.btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    fruitClick.edit(fruit);
+                }
+            });
+
     }
 
 
@@ -68,5 +88,6 @@ public class FruitAdapter  extends RecyclerView.Adapter<FruitAdapter.ViewHolder>
             super(binding.getRoot());
             this.binding = binding;
         }
+
     }
 }
