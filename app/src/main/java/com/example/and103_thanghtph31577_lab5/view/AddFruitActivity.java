@@ -81,6 +81,26 @@ binding.avatar.setOnClickListener(new View.OnClickListener() {
             String _status = binding.edStatus.getText().toString().trim();
             String _description = binding.edDescription.getText().toString().trim();
 
+            if (_name.isEmpty() || _quantity.isEmpty() || _price.isEmpty() || _status.isEmpty() || _description.isEmpty()) {
+                // Hiển thị thông báo lỗi nếu có trường nào đó rỗng
+                Toast.makeText(AddFruitActivity.this, "Không được để rỗng các trường", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                int quantity = Integer.parseInt(_quantity);
+                float price = Float.parseFloat(_price);
+                if (quantity <= 0 || price <= 0) {
+                    // Hiển thị thông báo lỗi nếu số lượng hoặc giá không hợp lệ
+                    Toast.makeText(AddFruitActivity.this, "Số lượng và giá phải lớn hơn 0", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                // Hiển thị thông báo lỗi nếu số lượng hoặc giá không hợp lệ
+                Toast.makeText(AddFruitActivity.this, "Số lượng hoặc giá không hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             mapRequestBody.put("name", getRequestBody(_name));
             mapRequestBody.put("quantity", getRequestBody(_quantity));
             mapRequestBody.put("price", getRequestBody(_price));

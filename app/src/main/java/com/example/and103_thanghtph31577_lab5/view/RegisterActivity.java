@@ -99,10 +99,26 @@ public class RegisterActivity extends AppCompatActivity {
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestBody _username = RequestBody.create(MediaType.parse("multipart/form-data"),binding.edUsername.getText().toString().trim());
-                RequestBody _password = RequestBody.create(MediaType.parse("multipart/form-data"),binding.edPassword.getText().toString().trim());
-                RequestBody _email = RequestBody.create(MediaType.parse("multipart/form-data"),binding.edEmail.getText().toString().trim());
-                RequestBody _name = RequestBody.create(MediaType.parse("multipart/form-data"),binding.edName.getText().toString().trim());
+                String username = binding.edUsername.getText().toString().trim();
+                String password = binding.edPassword.getText().toString().trim();
+                String email = binding.edEmail.getText().toString().trim();
+                String name = binding.edName.getText().toString().trim();
+
+                // Kiểm tra xem các trường có rỗng không
+                if (username.isEmpty() || password.isEmpty() || email.isEmpty() || name.isEmpty()) {
+                    // Hiển thị thông báo lỗi nếu có trường nào đó rỗng
+                    Toast.makeText(RegisterActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                RequestBody _username = RequestBody.create(MediaType.parse("multipart/form-data"),username);
+                RequestBody _password = RequestBody.create(MediaType.parse("multipart/form-data"),password);
+                RequestBody _email = RequestBody.create(MediaType.parse("multipart/form-data"),email);
+                RequestBody _name = RequestBody.create(MediaType.parse("multipart/form-data"),name);
+
+
+                // Kiểm tra hợp lệ của email (ví dụ: có chứa dấu @ không)
                 MultipartBody.Part multipartBody;
                 if (file !=null) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"),file);
@@ -117,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
     Callback<Response<User>> responseUser = new Callback<Response<User>>() {
         @Override
         public void onResponse(Call<Response<User>> call, retrofit2.Response<Response<User>> response) {

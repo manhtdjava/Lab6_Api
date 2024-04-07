@@ -41,6 +41,17 @@ public class LoginActivity extends AppCompatActivity {
                 User user = new User();
                 String _username = binding.edUsername.getText().toString().trim();
                 String _password = binding.edPassword.getText().toString().trim();
+
+                if (_username.isEmpty() || _password.isEmpty()) {
+                    // Hiển thị thông báo lỗi nếu có trường nào đó rỗng
+                    if (_username.isEmpty()) {
+                        Toast.makeText(LoginActivity.this, "Username không được để trống", Toast.LENGTH_SHORT).show();
+                    }
+                    if (_password.isEmpty()) {
+                        Toast.makeText(LoginActivity.this, "Password không được để trống", Toast.LENGTH_SHORT).show();
+                    }
+                    return;
+                }
                 user.setUsername(_username);
                 user.setPassword(_password);
                 httpRequest.callAPI().login(user).enqueue(responseUser);

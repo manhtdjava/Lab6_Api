@@ -19,6 +19,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".view.OrderFruitActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.FruitDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.UpdateFruitActivity"
             android:exported="false" />
         <activity

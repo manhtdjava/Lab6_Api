@@ -19,7 +19,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@android:dimen/app_icon_size"
-        android:background="#FFC107"
+        android:background="#6A5ACD"
         android:layout_marginBottom="20dp"
         android:gravity="start|center_vertical"
 
@@ -30,6 +30,7 @@
             android:text="Distributor List"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="@color/white"
             android:layout_marginStart="20dp"
             />
     </RelativeLayout>

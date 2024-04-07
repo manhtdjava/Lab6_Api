@@ -1,6 +1,9 @@
 package com.example.and103_thanghtph31577_lab5.adapter;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,40 +15,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.and103_thanghtph31577_lab5.R;
 import com.example.and103_thanghtph31577_lab5.databinding.ItemFruitBinding;
-import com.example.and103_thanghtph31577_lab5.model.Distributor;
+import com.example.and103_thanghtph31577_lab5.databinding.ItemOderBinding;
 import com.example.and103_thanghtph31577_lab5.model.Fruit;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Map;
 
-public class FruitAdapter  extends RecyclerView.Adapter<FruitAdapter.ViewHolder>{
+public class OderFruitAdapter extends RecyclerView.Adapter<OderFruitAdapter.ViewHolder>{
     private Context context;
     private ArrayList<Fruit> list;
-    private FruitClick fruitClick;
+    private SharedPreferences sharedPreferences;
 
-    public FruitAdapter(Context context, ArrayList<Fruit> list, FruitClick fruitClick) {
+    public OderFruitAdapter(Context context, ArrayList<Fruit> list, SharedPreferences sharedPreferences) {
         this.context = context;
         this.list = list;
-        this.fruitClick = fruitClick;
+        this.sharedPreferences = sharedPreferences;
     }
 
     public interface FruitClick {
         void delete(Fruit fruit);
-        void edit(Fruit fruit);
 
-        void showDetail(Fruit fruit);
-        void addToCart(Fruit fruit);
     }
 
     @NonNull
     @Override
-    public FruitAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemFruitBinding binding = ItemFruitBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
+    public OderFruitAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemOderBinding binding = ItemOderBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
 
         return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FruitAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OderFruitAdapter.ViewHolder holder, int position) {
         Fruit fruit = list.get(position);
         holder.binding.tvName.setText(fruit.getName());
         holder.binding.tvPriceQuantity.setText("price :" +fruit.getPrice()+" - quantity:" +fruit.getQuantity());
@@ -57,31 +59,8 @@ public class FruitAdapter  extends RecyclerView.Adapter<FruitAdapter.ViewHolder>
                 .thumbnail(Glide.with(context).load(R.drawable.baseline_broken_image_24))
                 .into(holder.binding.img);
 
-        holder.binding.btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fruitClick.edit(fruit);
-            }
-        });
-        holder.binding.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fruitClick.delete(fruit);
-            }
-        });
-        holder.binding.item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fruitClick.showDetail(fruit);
-            }
-        });
 
-        holder.binding.btnDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fruitClick.addToCart(fruit);
-            }
-        });
+
         Log.d("321321", "onBindViewHolder: "+list.get(position).getImage().get(0));
     }
 
@@ -92,8 +71,8 @@ public class FruitAdapter  extends RecyclerView.Adapter<FruitAdapter.ViewHolder>
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ItemFruitBinding binding;
-        public ViewHolder(ItemFruitBinding binding) {
+        ItemOderBinding binding;
+        public ViewHolder(ItemOderBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

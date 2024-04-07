@@ -47,7 +47,7 @@ public class UpdateFruitActivity extends AppCompatActivity {
     private String id_Distributor;
     private ArrayList<Distributor> distributorArrayList;
     private ArrayList<File> ds_image;
-    private String fruitId;
+    private String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         binding = ActivityUpdateFruitBinding.inflate(getLayoutInflater());
@@ -57,7 +57,7 @@ public class UpdateFruitActivity extends AppCompatActivity {
         httpRequest = new HttpRequest();
         configSpinner();
         userListener();
-         fruitId = getIntent().getStringExtra("fruit_id");
+         id = getIntent().getStringExtra("fruit_id");
 
     }
     private void userListener() {
@@ -83,6 +83,27 @@ binding.avatar.setOnClickListener(new View.OnClickListener() {
                 String _status = binding.edStatus.getText().toString().trim();
                 String _description = binding.edDescription.getText().toString().trim();
 
+                if (_name.isEmpty() || _quantity.isEmpty() || _price.isEmpty() || _status.isEmpty() || _description.isEmpty()) {
+                    // Hiển thị thông báo lỗi nếu có trường nào đó rỗng
+                    Toast.makeText(UpdateFruitActivity.this, "Không được để rỗng các trường", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                try {
+                    int quantity = Integer.parseInt(_quantity);
+                    float price = Float.parseFloat(_price);
+                    if (quantity <= 0 || price <= 0) {
+                        // Hiển thị thông báo lỗi nếu số lượng hoặc giá không hợp lệ
+                        Toast.makeText(UpdateFruitActivity.this, "Số lượng và giá phải lớn hơn 0", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    // Hiển thị thông báo lỗi nếu số lượng hoặc giá không hợp lệ
+                    Toast.makeText(UpdateFruitActivity.this, "Số lượng hoặc giá không hợp lệ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
                 // Tạo một Map chứa các thông tin cần cập nhật
                 Map<String, RequestBody> mapRequestBody = new HashMap<>();
                 mapRequestBody.put("name", getRequestBody(_name));
@@ -101,27 +122,7 @@ binding.avatar.setOnClickListener(new View.OnClickListener() {
                 });
 
                 // Gửi yêu cầu cập nhật dữ liệu trái cây đến máy chủ
-                httpRequest.callAPI().updateFruitWithFileImage(fruitId, mapRequestBody, _ds_image).enqueue(new Callback<Response<Fruit>>() {
-                    @Override
-                    public void onResponse(Call<Response<Fruit>> call, retrofit2.Response<Response<Fruit>> response) {
-                        if (response.isSuccessful()) {
-                            // Xử lý khi cập nhật thành công
-                            Toast.makeText(UpdateFruitActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            // Xử lý khi gặp lỗi trong quá trình cập nhật
-                            Toast.makeText(UpdateFruitActivity.this, "Cập nhật thất bại: " + response.message(), Toast.LENGTH_SHORT).show();
-                            Log.e("UpdateFruitActivity", "Error updating fruit: " + response.message());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Response<Fruit>> call, Throwable t) {
-                        // Xử lý khi gặp lỗi trong quá trình gửi yêu cầu cập nhật
-                        Toast.makeText(UpdateFruitActivity.this, "Cập nhật thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("UpdateFruitActivity", "Error updating fruit: " + t.getMessage());
-                    }
-                });
+                httpRequest.callAPI().updateFruitWithFileImage(id, mapRequestBody, _ds_image).enqueue(responseFruit);
             }
         });
 
